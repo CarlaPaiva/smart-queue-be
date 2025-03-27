@@ -6,10 +6,13 @@ import { CreateQueueItemHandler, CreateQueueItemRequest } from "./Handlers/creat
 @Controller('queue-item')
 export class QueueItemController {
 
+  constructor(
+    private readonly handler: CreateQueueItemHandler
+  ) {}
+
   @Post()
   async create(@Body() request: CreateQueueItemRequest): Promise<QueueItem> {
-    const handler = new CreateQueueItemHandler();
-    const result = await handler.ExecuteAsync(request);
+    const result = await this.handler.ExecuteAsync(request);
 
     return result.Result
   }

@@ -1,7 +1,8 @@
 import { IHandlerAsync, IRequest, Result } from "src/shared/IHandler";
 import QueueItem from "../queue-item.entity";
 import { Injectable } from "@nestjs/common";
-import { getRepository, Repository } from "typeorm";
+import {  Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 export class CreateQueueItemRequest implements IRequest {
     position: number;
@@ -10,19 +11,19 @@ export class CreateQueueItemRequest implements IRequest {
 
 @Injectable()
 export class CreateQueueItemHandler implements IHandlerAsync<QueueItem> {
-    private _repository: Repository<QueueItem>;
 
     /**
      *
      */
-    constructor() {
-        this._repository = getRepository(QueueItem)
+    constructor(
+        @InjectRepository(QueueItem) private readonly repository: Repository<QueueItem>
+    ) {
     }
 
     async ExecuteAsync(_request: CreateQueueItemRequest): Promise<Result<QueueItem>> {
         const queueItem = QueueItem.Create(_request.position, _request.clientIdentification);
 
-        const savedItem = await this._repository.save(queueItem)
+        const savedItem = await this.repository.save(queueItem)
 
         const result = new Result<QueueItem>();
 

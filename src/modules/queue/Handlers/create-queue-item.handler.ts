@@ -1,0 +1,39 @@
+import { IHandlerAsync, IRequest, Result } from "src/shared/IHandler";
+import QueueItem from "../queue-item.entity";
+import { Injectable } from "@nestjs/common";
+import { getRepository, Repository } from "typeorm";
+
+export class CreateQueueItemRequest implements IRequest {
+    position: number;
+    clientIdentification: string;
+}
+
+@Injectable()
+export class CreateQueueItemHandler implements IHandlerAsync<QueueItem> {
+    private _repository: Repository<QueueItem>;
+
+    /**
+     *
+     */
+    constructor() {
+        this._repository = getRepository(QueueItem)
+    }
+
+    async ExecuteAsync(_request: CreateQueueItemRequest): Promise<Result<QueueItem>> {
+        const queueItem = QueueItem.Create(_request.position, _request.clientIdentification);
+
+        const savedItem = await this._repository.save(queueItem)
+
+        const result = new Result<QueueItem>();
+
+
+        if (savedItem != null) {
+            result.SetError('Fail to save item.');
+        } else {
+            result.SetSuccess(queueItem);
+        }
+
+        return result;
+    }
+
+}

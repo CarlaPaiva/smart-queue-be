@@ -18,7 +18,6 @@ import { join } from 'path';
       database: process.env.DB_NAME,
       password: process.env.DB_PWD,
       username: process.env.DB_USER,
-      //entities: ['src/modules/*/**.entity{.ts,.js}'],
       entities: [join(__dirname, 'modules/*/**', '*.entity.{ts,js}')],
       logger: 'advanced-console',
       migrations: ["./src/migrations/*.ts"],

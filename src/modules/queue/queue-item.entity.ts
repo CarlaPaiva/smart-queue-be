@@ -9,22 +9,22 @@ export default class QueueItem {
     @Column('int')
     position: number;
 
-    @Column()
+    @Column({name: 'isactual'})
     isActual: boolean;
 
     @Column()
     identification: string;
 
-    @Column()
+    @Column({name: 'creationdate'})
     creationDate: Date
 
-    @Column({nullable: true})
+    @Column({nullable: true, name: 'ringdate'})
     ringDate?: Date
 
-    @Column({nullable: true})
+    @Column({nullable: true, name: 'startdate'})
     startDate?: Date
 
-    @Column({nullable: true})
+    @Column({nullable: true, name: 'finishdate'})
     finishDate?: Date
 
     /**

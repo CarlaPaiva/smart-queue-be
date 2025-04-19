@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common"
 import QueueItem from "./queue-item.entity";
-import { CreateQueueItemHandler, CreateQueueItemRequest } from "./Handlers/create-queue-item.handler";
+import { CreateQueueItemHandler, CreateQueueItemRequest } from "./handlers/create-queue-item.handler";
 import { ApiBody, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('QueueItem')

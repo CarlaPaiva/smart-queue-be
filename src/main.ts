@@ -8,8 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   
   const options = new DocumentBuilder()
-    .setTitle('Your API Title')
-    .setDescription('Your API description')
+    .setTitle('Atende mais BE')
     .setVersion('1.0')
     .build();
 

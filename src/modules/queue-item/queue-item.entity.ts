@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import Queue from "../queue/queue.entity";
 
 @Entity("queueitem")
 export default class QueueItem {
@@ -26,6 +27,10 @@ export default class QueueItem {
 
     @Column({nullable: true, name: 'finishdate'})
     finishDate?: Date
+
+    @ManyToOne(() => Queue, (queue) => queue.items)
+    @JoinColumn({name: 'queue_id'})
+    queue: Queue
 
     /**
      * Constructor

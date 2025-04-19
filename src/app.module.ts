@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QueueItemModule } from './modules/queue/queue-item.module';
+import { QueueItemModule } from './modules/queue-item/queue-item.module';
 import { join } from 'path';
+import { QueueModule } from './modules/queue/queue.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { join } from 'path';
       autoLoadEntities: true
     }),
     QueueItemModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

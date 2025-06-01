@@ -13,7 +13,7 @@ export class CreateQueueHandler implements IHandlerAsync<Queue> {
     }
 
     async ExecuteAsync(): Promise<Result<Queue>> {
-        const queue = Queue.Create();
+        const queue = Queue.create();
 
         const savedItem = await this.repository.save(queue)
 

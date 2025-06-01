@@ -22,19 +22,22 @@ export class AddItemToQueueHandler implements IHandlerAsync<Queue> {
             where: {
                 id: request.queue_id
             },
-            relations: ['items']
+            relations: ['items'],
+            order: {
+                items: {
+                    position: "ASC"
+                }
+            }
         })
-
-        console.log(queue)
 
         if (!queue) {
             res.SetError('Queue not found.');
             return res;
         }
 
-        const nextPosition = queue.GetLastPosition() + 1
+        const nextPosition = queue.getLastPosition() + 1
 
-        queue.AddItem(nextPosition, request.clientIdentification);
+        queue.addItem(nextPosition, request.clientIdentification);
 
         const savedQ = await this.repository.save(queue)
 

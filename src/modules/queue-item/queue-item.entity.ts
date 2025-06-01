@@ -48,7 +48,7 @@ export default class QueueItem {
     /**
      * Call this position
      */
-    public Call() {
+    public call() {
         this.isActual = true;
         this.ringDate = new Date();
     }
@@ -56,7 +56,7 @@ export default class QueueItem {
     /**
      * Put the item back to the queue
      */
-    public Requeue() {
+    public requeue() {
         this.isActual = false
     }
 
@@ -66,7 +66,7 @@ export default class QueueItem {
      * @param identification Client Identification
      * @returns new queue item
      */
-    public static Create(
+    public static create(
         position: number,
         identification: string
     ) : QueueItem {

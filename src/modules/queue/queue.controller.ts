@@ -1,8 +1,11 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
-import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Query } from "@nestjs/common";
+import { ApiBody, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { CreateQueueHandler } from "./handlers/queue.handler";
-import Queue from "./queue.entity";
+import Queue, { QueueDashboard } from "./queue.entity";
 import { AddItemToQueueHandler, AddItemToQueueRequest } from "./handlers/add-item-to-queue.handler";
+import { CallNextQueueItemHandler, CallNextQueueItemHandlerRequest } from "./handlers/call-next-queue-item.handler";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @ApiTags('Queue')
 @Controller('queue')
@@ -10,7 +13,9 @@ export class QueueController {
 
   constructor(
     private readonly createQueueHandler: CreateQueueHandler,
-    private readonly addItemToQueueHandler: AddItemToQueueHandler
+    private readonly addItemToQueueHandler: AddItemToQueueHandler,
+    private readonly callNextQueueItemHandler: CallNextQueueItemHandler,
+    @InjectRepository(Queue) private readonly repository: Repository<Queue>
   ) {}
   
   @Post()
@@ -47,5 +52,49 @@ export class QueueController {
     } else {
         return handlerResult.Result
     }
-  } 
+  }
+
+  @Post('call-next')
+  @ApiOperation({description: 'Calls queue next item'})
+  @ApiQuery({
+    example: "1234-csdf-34",
+    description: "queue_id"
+  })
+  async callNextQueueItem(@Query() queue_id: string): Promise<Queue> {
+    const handlerResult = await this.callNextQueueItemHandler.ExecuteAsync(new CallNextQueueItemHandlerRequest(queue_id))
+
+    if (handlerResult.HasError) {
+        throw new HttpException(handlerResult.ErrorMessage, HttpStatus.INTERNAL_SERVER_ERROR); 
+    } else {
+        return handlerResult.Result
+    }
+  }
+
+  @Get('dashboard')
+  @ApiOperation({description: 'Get Queue Dashboard'})
+  @ApiQuery({
+    example: "1234-csdf-34",
+    description: "queue_id"
+  })
+  async getQueueDashboard(@Query() queue_id: string): Promise<QueueDashboard> {
+    const queue = await this.repository.findOne({
+      where: {
+          id: queue_id
+      },
+      relations: ['items'],
+      order: {
+          items: {
+              position: "ASC"
+          }
+      }
+  })
+
+    if (!queue) {
+        throw new HttpException("Not found", HttpStatus.NOT_FOUND); 
+    } 
+
+    const qd = QueueDashboard.create(queue)
+
+    return qd
+  }
 }

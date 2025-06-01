@@ -21,7 +21,7 @@ export class CreateQueueItemHandler implements IHandlerAsync<QueueItem> {
     }
 
     async ExecuteAsync(_request: CreateQueueItemRequest): Promise<Result<QueueItem>> {
-        const queueItem = QueueItem.Create(_request.position, _request.clientIdentification);
+        const queueItem = QueueItem.create(_request.position, _request.clientIdentification);
 
         const savedItem = await this.repository.save(queueItem)
 

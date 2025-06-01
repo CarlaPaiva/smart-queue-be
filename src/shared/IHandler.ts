@@ -17,6 +17,21 @@ export class Result<T> {
     }
 }
 
+export class ResultValidation {
+    HasError: boolean;
+    ErrorMessage: string;
+
+    SetSuccess() {
+        this.HasError = false
+        this.ErrorMessage =  ''
+    }
+
+    SetError(errorMessage: string) {
+        this.HasError = true
+        this.ErrorMessage =  errorMessage
+    }
+}
+
 export interface IHandler<T> {
     Execute(request: IRequest): Result<T>
 }

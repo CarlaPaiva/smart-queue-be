@@ -127,7 +127,8 @@ export class QueueDashboard {
 
         counter = 0
         for (let j = position; j >= 0; j--) {
-            const actual = queue.items[i]
+            const actual = queue.items[j]
+            
             if (counter >= qtdMaxItems) {
                 break
             }
@@ -135,7 +136,7 @@ export class QueueDashboard {
             if (actual.id === qd.Current?.id) {
                 continue
             }
-            
+
             qd.CalledItems.push(queue.items[j])
             counter++
         }

@@ -51,12 +51,18 @@ export default class Queue {
 
         if (!actual) {
             index = 0
+        } else {
+            index = this.items.indexOf(actual)
+            index++
         }
 
-        index = this.items.indexOf(actual as QueueItem)
-
-        // Call next item
-        this.items[index].call()
+        if (this.items[index]) {
+            // Call next item
+            this.items[index].call()
+        } else {
+            res.SetError('End of queue.')
+            return res
+        }
 
         // Make last 'current' as not actual
         if (this.items[index - 1]) {
@@ -106,20 +112,30 @@ export class QueueDashboard {
 
         let counter = 0
         for (let i = position; i < queue.items.length; i++) {
-
+            const actual = queue.items[i]
             if (counter >= qtdMaxItems) {
                 break
             }
 
-            qd.NextItems.push(queue.items[i])
+            if (actual.id === qd.Current?.id) {
+                continue
+            }
+
+            qd.NextItems.push(actual)
             counter++
         }
 
         counter = 0
         for (let j = position; j >= 0; j--) {
+            const actual = queue.items[i]
             if (counter >= qtdMaxItems) {
                 break
             }
+
+            if (actual.id === qd.Current?.id) {
+                continue
+            }
+            
             qd.CalledItems.push(queue.items[j])
             counter++
         }

@@ -60,7 +60,7 @@ export class QueueController {
     example: "1234-csdf-34",
     description: "queue_id"
   })
-  async callNextQueueItem(@Query() queue_id: string): Promise<Queue> {
+  async callNextQueueItem(@Query('queue_id') queue_id: string): Promise<Queue> {
     const handlerResult = await this.callNextQueueItemHandler.ExecuteAsync(new CallNextQueueItemHandlerRequest(queue_id))
 
     if (handlerResult.HasError) {
@@ -76,7 +76,7 @@ export class QueueController {
     example: "1234-csdf-34",
     description: "queue_id"
   })
-  async getQueueDashboard(@Query() queue_id: string): Promise<QueueDashboard> {
+  async getQueueDashboard(@Query('queue_id') queue_id: string): Promise<QueueDashboard> {
     const queue = await this.repository.findOne({
       where: {
           id: queue_id
